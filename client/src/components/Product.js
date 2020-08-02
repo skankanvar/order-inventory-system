@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Card, Segment, Form, Button } from "semantic-ui-react";
 import styled from "styled-components";
 import FlexBox from "./Flexbox";
+import axios from "axios";
 
 const intialValue = {
   name: "",
@@ -24,25 +25,26 @@ function Product() {
   function handleChange(e) {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(stock);
     setStock({ ...stock, [name]: value });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log(stock);
-    setStock({ ...intialValue });
+    await axios.put(`/products/${productId}`, stock);
   }
   useEffect(() => {
-    console.log(productId);
+    (async function () {
+      const response = await axios.get(`/products/${productId}`);
+      setStock(response.data);
+    })();
   }, [productId]);
   return (
     <Segment>
       <FlexBox flexDirection="row">
         <Card
           image="/product.jpg"
-          header="Product Name"
-          description="This is the product information"
+          header={stock.name}
+          description={stock.description}
         />
         <StyledForm onSubmit={handleSubmit}>
           <Form.Field>

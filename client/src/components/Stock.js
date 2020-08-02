@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Form, Button, Checkbox, Segment } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Form, Button, Segment } from "semantic-ui-react";
+import axios from "axios";
 
 const intialValue = {
   name: "",
@@ -8,19 +9,18 @@ const intialValue = {
   price: "",
 };
 
-function Stock({ addStock }) {
+function Stock() {
   const [stock, setStock] = useState(intialValue);
 
   function handleChange(e) {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(stock);
     setStock({ ...stock, [name]: value });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    console.log(stock);
+    await axios.post(`/products/`, stock);
     setStock({ ...intialValue });
   }
 

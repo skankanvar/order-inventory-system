@@ -1,64 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
-
-const response = {
-  data: {
-    products: [
-      {
-        id: 1,
-        productName: "Television",
-        description: "Viewing device",
-        price: "99.00",
-        quatity: "10",
-      },
-      {
-        id: 2,
-        productName: "Sensor",
-        description: "Sound Sensor",
-        price: "99.00",
-        quatity: "10",
-      },
-      {
-        id: 3,
-        productName: "Sensor",
-        description: "Sound Sensor",
-        price: "99.00",
-        quatity: "10",
-      },
-      {
-        id: 4,
-        productName: "Sensor",
-        description: "Sound Sensor",
-        price: "99.00",
-        quatity: "10",
-      },
-      {
-        id: 5,
-        productName: "Sensor",
-        description: "Sound Sensor",
-        price: "99.00",
-        quatity: "10",
-      },
-      {
-        id: 6,
-        productName: "Sensor",
-        description: "Sound Sensor",
-        price: "99.00",
-        quatity: "10",
-      },
-      {
-        id: 7,
-        productName: "Sensor",
-        description: "Sound Sensor",
-        price: "99.00",
-        quatity: "10",
-      },
-    ],
-  },
-};
+import axios from "axios";
 
 function Inventory() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    (async function () {
+      const response = await axios.get("/products");
+      setProducts(response.data);
+    })();
+  }, []);
   const history = useHistory();
   function handleProduct(id) {
     history.push(`/products/${id}`);
@@ -76,7 +29,7 @@ function Inventory() {
       </Table.Header>
 
       <Table.Body>
-        {response.data.products.map((product, index) => (
+        {products.map((product, index) => (
           <Table.Row
             key={product.id}
             onClick={() => {
@@ -84,10 +37,10 @@ function Inventory() {
             }}
           >
             <Table.Cell>{index + 1}</Table.Cell>
-            <Table.Cell>{product.productName}</Table.Cell>
+            <Table.Cell>{product.name}</Table.Cell>
             <Table.Cell>{product.description}</Table.Cell>
             <Table.Cell>{product.price}</Table.Cell>
-            <Table.Cell>{product.quatity}</Table.Cell>
+            <Table.Cell>{product.quantity}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>

@@ -1,15 +1,18 @@
-module.exports = app => {
-    const orders = require("../controllers/order.controller.js");
-  
-    // Create a new Product
-    app.post("/orders", orders.create);
+module.exports = (app) => {
+  const orders = require("../controllers/order.controller.js");
 
-    // Retrieve a single Product with productId
-    app.get("/orders/:id", orders.findById);
-  
-    // Update a Product with productId
-    app.put("/orders/:id", orders.updateById);
-  
-    // Delete a Product with productId
-    app.delete("/orders/:id", orders.deleteById);
-  };
+  // Create a new Order
+  app.post("/orders", orders.create);
+
+  // Get All Orders
+  app.get("/orders", orders.findAll);
+
+  // Retrieve a single Order with OrderId
+  app.get("/orders/:id", orders.findById);
+
+  // Update a Order with OrderId
+  app.put("/orders/:id", orders.updateById);
+
+  // Delete a Order with OrderId
+  app.delete("/orders/:id", orders.deleteById);
+};

@@ -1,61 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
-
-const response = {
-  data: {
-    orders: [
-      {
-        id: 1,
-        createDate: new Date(),
-        deliverBy: new Date(),
-        isFulfilled: false,
-      },
-      {
-        id: 2,
-        createDate: new Date(),
-        deliverBy: new Date(),
-        isFulfilled: false,
-      },
-      {
-        id: 3,
-        createDate: new Date(),
-        deliverBy: new Date(),
-        isFulfilled: false,
-      },
-      {
-        id: 4,
-        createDate: new Date(),
-        deliverBy: new Date(),
-        isFulfilled: false,
-      },
-      {
-        id: 5,
-        createDate: new Date(),
-        deliverBy: new Date(),
-        isFulfilled: false,
-      },
-      {
-        id: 6,
-        createDate: new Date(),
-        deliverBy: new Date(),
-        isFulfilled: false,
-      },
-      {
-        id: 7,
-        createDate: new Date(),
-        deliverBy: new Date(),
-        isFulfilled: false,
-      },
-    ],
-  },
-};
+import axios from "axios";
 
 function OrderHistory() {
+  const [orders, setOrders] = useState([]);
   const history = useHistory();
   function handleProduct(id) {
     history.push(`/orders/${id}`);
   }
+
+  useEffect(() => {
+    (async function () {
+      const response = await axios.get("/orders");
+      setOrders(response.data);
+    })();
+  }, []);
+
   return (
     <Table celled selectable>
       <Table.Header>
@@ -68,7 +29,7 @@ function OrderHistory() {
       </Table.Header>
 
       <Table.Body>
-        {response.data.orders.map((order, index) => (
+        {orders.map((order, index) => (
           <Table.Row
             key={order.id}
             onClick={() => {
@@ -76,9 +37,11 @@ function OrderHistory() {
             }}
           >
             <Table.Cell>{order.id}</Table.Cell>
-            <Table.Cell>{order.createDate.toDateString()}</Table.Cell>
-            <Table.Cell>{order.deliverBy.toDateString()}</Table.Cell>
-            <Table.Cell>Not Fulfilled</Table.Cell>
+            <Table.Cell>{order.createDate}</Table.Cell>
+            <Table.Cell>{order.deliverBy}</Table.Cell>
+            <Table.Cell>
+              {order.fulfilled ? "Fulfilled" : "Not Filfilled"}
+            </Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
