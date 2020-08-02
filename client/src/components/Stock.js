@@ -27,7 +27,7 @@ function Stock() {
   return (
     <Segment>
       <Form onSubmit={handleSubmit}>
-        <Form.Field>
+        <Form.Field required>
           <label>Product Name</label>
           <input
             placeholder="Product Name"
@@ -46,7 +46,7 @@ function Stock() {
           />
         </Form.Field>
         <Form.Group widths="equal">
-          <Form.Field>
+          <Form.Field required>
             <label>Quantity</label>
             <input
               type="text"
@@ -56,7 +56,7 @@ function Stock() {
               onChange={handleChange}
             />
           </Form.Field>
-          <Form.Field>
+          <Form.Field required>
             <label>Price</label>
             <input
               type="text"
