@@ -63,6 +63,7 @@ function Product() {
               name="description"
               value={stock.description}
               onChange={handleChange}
+              data-cy="productDescription"
             />
           </Form.Field>
           <Form.Group widths="equal">
