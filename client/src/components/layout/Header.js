@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Menu } from "semantic-ui-react";
 import styled from "styled-components";
 
@@ -13,6 +14,7 @@ function Header() {
   const [activeItem, setActiveItem] = useState("/");
   const history = useHistory();
   const location = useLocation();
+  const isCustomer = useSelector((state) => state.isCustomer);
   useEffect(() => {
     setActiveItem(location.pathname);
   }, [location.pathname]);
@@ -30,6 +32,16 @@ function Header() {
           handleClick("/inventory");
         }}
       />
+      {isCustomer && (
+        <Menu.Item
+          name="Cart"
+          position="right"
+          active={activeItem === "/cart"}
+          onClick={() => {
+            handleClick("/cart");
+          }}
+        />
+      )}
     </StyledMenu>
   );
 }
