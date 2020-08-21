@@ -1,15 +1,15 @@
-module.exports = app => {
-    const carts = require("../controllers/cart.controller.js");
-  
-    // Create a new Product
-    app.post("/carts", carts.create);
+module.exports = (app) => {
+  const carts = require("../controllers/cart.controller.js");
 
-    // Retrieve a single Product with productId
-    app.get("/carts/:cartid", carts.findByCartId);
-  
-    // Update a Product with productId
-    app.put("/carts/:cartid", carts.updateByCartId);
-  
-    // Delete a Product with productId
-    app.delete("/carts/:cartid", carts.deleteByCartId);
-  };
+  // Create a new Product
+  //app.post("/cart/users/:id", carts.create);
+
+  // Retrieve products in the cart
+  app.get("/cart/users/:id", carts.findByCartUserId);
+
+  // Update a Product with productId
+  //app.put("/cart/users/:id", carts.updateByCartId);
+
+  // Delete a Product with productId
+  //app.delete("/cart/users/:id", carts.deleteByCartId);
+};
