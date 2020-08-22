@@ -2,81 +2,60 @@ const sql = require("./db.js");
 
 // constructor
 const Cart = function (cart) {
-  this.cartid = cart.cartid;
-  this.productid = cart.productid;
+  this.id = cart.id;
+  this.productId = cart.productId;
   this.quantity = cart.quantity;
-  this.createddate = cart.createddate;
-  this.active = cart.active;
+  this.userId = cart.userId;
 };
 
-Cart.create = (newCart, result) => {
-  getActiveOrNextCartId((err, cartid) => {
-    if (err) {
-      result(err, null);
-      return;
-    } else {
-      newCart.cartid = cartid;
-      sql.query("INSERT INTO carts SET ?", newCart, (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
-        }
-        console.log("created cart: ", newCart);
-        result(null, newCart);
-      });
-    }
-  });
-};
-
-const getActiveOrNextCartId = (result) => {
-  sql.query(`SELECT * FROM carts order by cartid desc`, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    if (res.length) {
-      console.log("found cart: ", res[0]);
-      if (res[0].active) {
-        result(err, res[0].cartid);
-        // result.cartid = res[0].cartid;
-      } else {
-        result(err, res[0].cartid + 1);
-        // result.cartid = res[0].cartid +1;
+Cart.create = (cart, result) => {
+  sql.query(
+    `INSERT INTO cart (userId, productId, quantity) VALUES ( ${cart.userId}, ${cart.productId}, ${cart.quantity})`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
       }
-      return;
-    } else {
-      result(err, 1);
-      // result.cartid = 1;
+
+      if (res.affectedRows == 0) {
+        // not found Cart with the cartid
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("inserted new Item for user cart");
+      result(null, res);
     }
-  });
+  );
 };
 
 Cart.findByCartByUserId = (userId, result) => {
-  sql.query(`SELECT * FROM cart WHERE userId = ${userId}`, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
+  sql.query(
+    `SELECT c.id AS id, c.userId, c.productId, c.quantity, c.createDate, c.updateDate, p.name, p.description, p.price from cart c INNER JOIN products p ON c.productId = p.id where userId = ${userId}`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
 
-    if (res.length) {
-      console.log("found cart: ", res);
+      if (res.affectedRows == 0) {
+        // not inserted
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      // not found Cart with the cartid
       result(null, res);
-      return;
     }
-
-    // not found Cart with the cartid
-    result({ kind: "not_found" }, null);
-  });
+  );
 };
 
-Cart.updateByCartId = (cartid, cart, result) => {
+Cart.updateByCartId = (id, quantity, result) => {
   sql.query(
-    "UPDATE carts SET quantity = ?, productid = ?, active = ? WHERE cartid = ?",
-    [cart.quantity, cart.productid, cart.active, cartid],
+    "UPDATE cart SET quantity = ? WHERE id = ?",
+    [quantity, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -90,14 +69,14 @@ Cart.updateByCartId = (cartid, cart, result) => {
         return;
       }
 
-      console.log("updated cart: ", { ...cart, cartid: cartid });
-      result(null, { ...cart, cartid: cartid });
+      console.log("updated cart: ", id);
+      result(null, { id, quantity });
     }
   );
 };
 
-Cart.deleteByCartId = (cartid, result) => {
-  sql.query("DELETE FROM carts WHERE cartid = ?", cartid, (err, res) => {
+Cart.deleteByCartId = (id, result) => {
+  sql.query("DELETE FROM cart WHERE id = ?", id, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -110,7 +89,7 @@ Cart.deleteByCartId = (cartid, result) => {
       return;
     }
 
-    console.log("deleted cart with cartid: ", cartid);
+    console.log("deleted cart with cartid: ", id);
     result(null, res);
   });
 };

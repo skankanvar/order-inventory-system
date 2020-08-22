@@ -11,11 +11,9 @@ exports.create = (req, res) => {
 
   // Create a Cart
   const cart = new Cart({
-    cartid: req.body.cartid,
-    createddate: new Date(),
-    productid: req.body.productid,
+    productId: req.body.productId,
     quantity: req.body.quantity,
-    active: req.body.active,
+    userId: req.params.id,
   });
 
   // Save Cart in the database
@@ -54,15 +52,15 @@ exports.updateByCartId = (req, res) => {
     });
   }
 
-  Cart.updateByCartId(req.params.cartid, new Cart(req.body), (err, data) => {
+  Cart.updateByCartId(req.params.id, req.body.quantity, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Cart with cartid ${req.params.cartid}.`,
+          message: `Not found Cart with cartid ${req.params.id}.`,
         });
       } else {
         res.status(500).send({
-          message: "Error updating Cart with cartid " + req.params.cartid,
+          message: "Error updating Cart with cartid " + req.params.id,
         });
       }
     } else res.send(data);
@@ -71,17 +69,17 @@ exports.updateByCartId = (req, res) => {
 
 // Delete a Cart with the specified cartId in the request
 exports.deleteByCartId = (req, res) => {
-  Cart.deleteByCartId(req.params.cartid, (err, data) => {
+  Cart.deleteByCartId(req.params.id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found Cart with cartid ${req.params.cartid}.`,
+          message: `Not found Cart with id ${req.params.id}.`,
         });
       } else {
         res.status(500).send({
-          message: "Could not delete Cart with cartid " + req.params.cartid,
+          message: "Could not delete Cart with id " + req.params.id,
         });
       }
-    } else res.send({ message: `Cart was deleted successfully!` });
+    } else res.send({ message: `Item from cart was deleted successfully!` });
   });
 };

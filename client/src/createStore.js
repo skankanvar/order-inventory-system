@@ -4,7 +4,7 @@ const reducer = (state = {}, action) => {
   if (action.type === "SET_USER") {
     return action.user;
   }
-  return { isCustomer: true, id: "12345" };
+  return { isCustomer: true, id: "1" };
 };
 
 const store = createStore(reducer);

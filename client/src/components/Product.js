@@ -32,6 +32,7 @@ function Product() {
   const { productId } = useParams();
   const [stock, setStock] = useState(intialValue);
   const isCustomer = useSelector((state) => state.isCustomer);
+  const userId = useSelector((state) => state.id);
 
   function handleChange(e) {
     const name = e.target.name;
@@ -43,6 +44,15 @@ function Product() {
     e.preventDefault();
     await axios.put(`/products/${productId}`, stock);
   }
+
+  async function addToCart() {
+    await axios.post(`/cart/users/${userId}`, {
+      quantity: 1,
+      productId: stock.id,
+    });
+    alert("Item added to cart");
+  }
+
   useEffect(() => {
     (async function () {
       const response = await axios.get(`/products/${productId}`);
@@ -107,7 +117,9 @@ function Product() {
         <StyledDiv>Quantity: {stock.quantity}</StyledDiv>
         <StyledDiv>Price: {stock.price}</StyledDiv>
       </FlexBox>
-      <Button primary>Add to Cart</Button>
+      <Button primary onClick={addToCart}>
+        Add to Cart
+      </Button>
     </ProductInfo>
   );
 
