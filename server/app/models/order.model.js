@@ -5,22 +5,27 @@ const Order = function (order) {
   this.id = order.id;
   this.createdate = order.createdate;
   this.deliverBy = order.deliverBy;
-  this.productid = order.productid;
-  this.quantity = order.quantity;
+  this.products = order.products;
   this.fulfilled = order.fulfilled;
   this.shippingAddress = order.shippingAddress;
+  this.userId = order.userId;
 };
 
 Order.create = (newOrder, result) => {
-  sql.query("INSERT INTO orders SET ?", newOrder, (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
+  const str = `INSERT INTO orders (deliverBy, products, fulfilled, shippingAddress, userId) VALUES (${newOrder.deliverBy}, '${newOrder.products}', ${newOrder.fulfilled}, '${newOrder.shippingAddress}',${newOrder.userId})`;
+  console.log(str);
+  sql.query(
+    `INSERT INTO orders (deliverBy, products, fulfilled, shippingAddress, userId) VALUES (${newOrder.deliverBy}, ${newOrder.products}, ${newOrder.fulfilled}, ${newOrder.shippingAddress},${newOrder.userId})`,
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+      console.log("created order: ", { ...newOrder, id: res.insertId });
+      result(null, { ...newOrder, id: res.insertId });
     }
-    console.log("created order: ", { ...newOrder, id: res.insertId });
-    result(null, { ...newOrder, id: res.insertId });
-  });
+  );
 };
 
 Order.findById = (id, result) => {

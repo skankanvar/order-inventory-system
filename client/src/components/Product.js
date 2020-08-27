@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Card, Segment, Form, Button } from "semantic-ui-react";
+import {
+  Card,
+  Segment,
+  Form,
+  Button,
+  TextArea,
+  Divider,
+} from "semantic-ui-react";
 import styled from "styled-components";
 import FlexBox from "./Flexbox";
 import axios from "axios";
@@ -120,6 +127,15 @@ function Product() {
       <Button primary onClick={addToCart}>
         Add to Cart
       </Button>
+      <Divider />
+      <Form>
+        <TextArea placeholder="Submit Enhancement Request" />
+        <StyledDiv>
+          <Button primary onSubmit={handleSubmit}>
+            Submit
+          </Button>
+        </StyledDiv>
+      </Form>
     </ProductInfo>
   );
 

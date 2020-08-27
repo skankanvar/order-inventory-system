@@ -1,4 +1,5 @@
 const Order = require("../models/order.model.js");
+const { json } = require("body-parser");
 
 // Create and Save a new Order
 exports.create = (req, res) => {
@@ -11,12 +12,11 @@ exports.create = (req, res) => {
 
   // Create a Order
   const order = new Order({
-    productid: req.body.productid,
+    products: JSON.stringify(req.body.products),
     fulfilled: req.body.fulfilled,
-    quantity: req.body.quantity,
     deliverBy: req.body.deliverBy,
     shippingAddress: JSON.stringify(req.body.shippingAddress),
-    createdate: new Date(),
+    userId: req.params.id,
   });
 
   // Save Order in the database
