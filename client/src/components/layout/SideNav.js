@@ -19,7 +19,7 @@ function SideNav() {
 
   return (
     <Menu vertical color="grey">
-      <Menu.Item
+      <Menu.Item id="viewinventory"
         active={activeItem === "/products"}
         onClick={() => {
           handleClick("/products");
@@ -32,7 +32,7 @@ function SideNav() {
           active={activeItem === "/addStock"}
           onClick={() => {
             handleClick("/addStock");
-          }}
+          }} id="addstock"
         >
           Add Stock
         </Menu.Item>
@@ -41,7 +41,7 @@ function SideNav() {
         active={activeItem === "/orders"}
         onClick={() => {
           handleClick("/orders");
-        }}
+        }} id="orders"
       >
         Order History
       </Menu.Item>
