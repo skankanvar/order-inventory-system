@@ -160,7 +160,7 @@ function Product() {
       <Form>
         <TextArea placeholder="Submit Enhancement Request" />
         <StyledDiv>
-          <Button primary onSubmit={handleSubmit}>
+          <Button primary onClick={handleSubmit}>
             Submit
           </Button>
         </StyledDiv>
