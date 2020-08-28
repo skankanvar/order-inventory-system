@@ -41,19 +41,30 @@ function Product() {
   const { productId } = useParams();
   const [stock, setStock] = useState(intialValue);
   const [enhancements, setEnchancements] = useState([]);
+  const [enhancement, setEnhancement] = useState("");
   const isCustomer = useSelector((state) => state.isCustomer);
   const userId = useSelector((state) => state.id);
 
-  function handleChange(e) {
+  function handleChange(e, data) {
     const name = e.target.name;
     const value = e.target.value;
-    setStock({ ...stock, [name]: value });
+    if (data) {
+      setEnhancement(data.value);
+    } else {
+      setStock({ ...stock, [name]: value });
+    }
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
     await axios.put(`/products/${productId}`, stock);
     alert("Product is edited");
+  }
+
+  async function submitEnhacement() {
+    await axios.post(`/enhancement/products/${productId}`, { enhancement });
+    setEnhancement("");
+    alert("Enhancement Submitted");
   }
 
   async function addToCart() {
@@ -158,9 +169,13 @@ function Product() {
       </Button>
       <Divider />
       <Form>
-        <TextArea placeholder="Submit Enhancement Request" />
+        <TextArea
+          placeholder="Submit Enhancement Request"
+          value={enhancement}
+          onChange={handleChange}
+        />
         <StyledDiv>
-          <Button primary onClick={handleSubmit}>
+          <Button primary onClick={submitEnhacement}>
             Submit
           </Button>
         </StyledDiv>
