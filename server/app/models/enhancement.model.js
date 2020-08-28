@@ -9,7 +9,7 @@ const Enhancement = function (enhancement) {
 
 Enhancement.create = (newEnhancement, result) => {
   sql.query(
-    `INSERT INTO enhancement (productId, enhancement) VALUES (${newEnhancement.productId}, ${newEnhancement.enhancement})`,
+    `INSERT INTO enhancement (productId, enhancement) VALUES (${newEnhancement.productId}, "${newEnhancement.enhancement}")`,
     (err, res) => {
       if (err) {
         console.log("error: ", err);
