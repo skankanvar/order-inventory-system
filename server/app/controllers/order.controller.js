@@ -1,5 +1,4 @@
 const Order = require("../models/order.model.js");
-const { json } = require("body-parser");
 
 // Create and Save a new Order
 exports.create = (req, res) => {

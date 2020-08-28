@@ -8,6 +8,8 @@ import {
   Button,
   TextArea,
   Divider,
+  List,
+  Header,
 } from "semantic-ui-react";
 import styled from "styled-components";
 import FlexBox from "./Flexbox";
@@ -38,6 +40,7 @@ const StyledDiv = styled.div`
 function Product() {
   const { productId } = useParams();
   const [stock, setStock] = useState(intialValue);
+  const [enhancements, setEnchancements] = useState([]);
   const isCustomer = useSelector((state) => state.isCustomer);
   const userId = useSelector((state) => state.id);
 
@@ -50,6 +53,7 @@ function Product() {
   async function handleSubmit(e) {
     e.preventDefault();
     await axios.put(`/products/${productId}`, stock);
+    alert("Product is edited");
   }
 
   async function addToCart() {
@@ -62,58 +66,83 @@ function Product() {
 
   useEffect(() => {
     (async function () {
-      const response = await axios.get(`/products/${productId}`);
-      setStock(response.data);
+      try {
+        const response = await axios.get(`/products/${productId}`);
+        setStock(response.data);
+        const enhancementResponse = await axios.get(
+          `/enhancement/products/${productId}`
+        );
+        setEnchancements(enhancementResponse.data);
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [productId]);
 
   const tactual = (
-    <StyledForm onSubmit={handleSubmit}>
-      <Form.Field>
-        <label>Product Name</label>
-        <input
-          placeholder="Product Name"
-          name="name"
-          value={stock.name}
-          onChange={handleChange}
-        />
-      </Form.Field>
-      <Form.Field>
-        <label>Description</label>
-        <input
-          placeholder="Description"
-          name="description"
-          value={stock.description}
-          onChange={handleChange}
-          data-cy="productDescription"
-        />
-      </Form.Field>
-      <Form.Group widths="equal">
+    <div>
+      <StyledForm onSubmit={handleSubmit}>
         <Form.Field>
-          <label>Quantity</label>
+          <label>Product Name</label>
           <input
-            type="text"
-            placeholder="0"
-            name="quantity"
-            value={stock.quantity}
+            placeholder="Product Name"
+            name="name"
+            value={stock.name}
             onChange={handleChange}
           />
         </Form.Field>
         <Form.Field>
-          <label>Price</label>
+          <label>Description</label>
           <input
-            type="text"
-            placeholder="0"
-            name="price"
-            value={stock.price}
+            placeholder="Description"
+            name="description"
+            value={stock.description}
             onChange={handleChange}
+            data-cy="productDescription"
           />
         </Form.Field>
-      </Form.Group>
-      <Button type="submit" primary>
-        Edit Product
-      </Button>
-    </StyledForm>
+        <Form.Group widths="equal">
+          <Form.Field>
+            <label>Quantity</label>
+            <input
+              type="text"
+              placeholder="0"
+              name="quantity"
+              value={stock.quantity}
+              onChange={handleChange}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Price</label>
+            <input
+              type="text"
+              placeholder="0"
+              name="price"
+              value={stock.price}
+              onChange={handleChange}
+            />
+          </Form.Field>
+        </Form.Group>
+        <Button type="submit" primary>
+          Edit Product
+        </Button>
+        <div>
+          {enhancements.length > 0 && (
+            <div>
+              <Divider />
+              <Header as="h3" content="Enhancement Request" />
+              <List bulleted>
+                {enhancements.map((enhancement) => (
+                  <List.Item key={enhancement.id}>
+                    {enhancement.enhancement}
+                  </List.Item>
+                ))}
+              </List>
+            </div>
+          )}
+        </div>
+      </StyledForm>
+    </div>
   );
 
   const customer = (
