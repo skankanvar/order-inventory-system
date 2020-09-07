@@ -51,10 +51,18 @@ const Cart = () => {
     );
   }
 
-  async function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault();
-  await axios.post(`/order/users/${userId}`, {products: cart, shippingAddress: {address1: '23600 Kindred Ter'}});
-  alert("Order Submitted");
+    await axios.post(`/order/users/${userId}`, {
+      products: cart,
+      shippingAddress: {
+        street1: "23600 Kindred Ter",
+        street2: "",
+        zipCode: "20148",
+        state: "VA",
+      },
+    });
+    alert("Order Submitted");
   }
 
   return (

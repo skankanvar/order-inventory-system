@@ -11,9 +11,9 @@ exports.create = (req, res) => {
 
   // Create a Order
   const order = new Order({
-    products: JSON.stringify({products: req.body.products}),
+    products: JSON.stringify({ products: req.body.products }),
     fulfilled: false,
-    deliverBy: '2021-1-1',
+    deliverBy: "2021-1-1",
     shippingAddress: JSON.stringify(req.body.shippingAddress),
     userId: req.params.id,
   });
@@ -54,7 +54,7 @@ exports.updateById = (req, res) => {
     });
   }
 
-  Order.updateById(req.params.id, new Order(req.body), (err, data) => {
+  Order.updateById(req.params.id, req.body.fulfilled, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({

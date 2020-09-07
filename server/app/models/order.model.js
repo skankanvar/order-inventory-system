@@ -29,38 +29,28 @@ Order.create = (newOrder, result) => {
 };
 
 Order.findById = (id, result) => {
-  sql.query(
-    `SELECT o.id, o.quantity, o.createdate, o.deliverBy, o.fulfilled, o.shippingAddress, p.name as productName,p.id as productId FROM orders o join products p on p.id = o.productid WHERE o.id = ${id}`,
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-
-      if (res.length) {
-        console.log("found order: ", res);
-        result(null, res);
-        return;
-      }
-
-      // not found Order with the cartid
-      result({ kind: "not_found" }, null);
+  sql.query(`SELECT * FROM orders WHERE id = ${id}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
     }
-  );
+
+    if (res.length) {
+      console.log("found order: ", res);
+      result(null, res);
+      return;
+    }
+
+    // not found Order with the cartid
+    result({ kind: "not_found" }, null);
+  });
 };
 
-Order.updateById = (id, order, result) => {
+Order.updateById = (id, fulfilled, result) => {
   sql.query(
-    "UPDATE orders SET productid = ?, quantity=?, fulfilled=?, deliverBy=?, shippingAddress=? WHERE id = ?",
-    [
-      order.productid,
-      order.quantity,
-      order.fulfilled,
-      order.deliverBy,
-      order.shippingAddress,
-      id,
-    ],
+    "UPDATE orders SET fulfilled=? WHERE id = ?",
+    [fulfilled, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -74,8 +64,8 @@ Order.updateById = (id, order, result) => {
         return;
       }
 
-      console.log("updated order: ", { ...order, id: id });
-      result(null, { ...order, id: id });
+      console.log("updated order: ", { id });
+      result(null, { id });
     }
   );
 };

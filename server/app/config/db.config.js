@@ -1,6 +1,6 @@
 module.exports = {
-    HOST: "localhost",
-    USER: "root",
-    PASSWORD: "password",
-    DB: "tactual"
-  };
+  HOST: "localhost",
+  USER: "root",
+  PASSWORD: "mypass123",
+  DB: "tactual",
+};
