@@ -12,10 +12,10 @@ const Order = function (order) {
 };
 
 Order.create = (newOrder, result) => {
-  const str = `INSERT INTO orders (deliverBy, products, fulfilled, shippingAddress, userId) VALUES (${newOrder.deliverBy}, '${newOrder.products}', ${newOrder.fulfilled}, '${newOrder.shippingAddress}',${newOrder.userId})`;
+  const str = `INSERT INTO orders (deliverBy, products, fulfilled, shippingAddress, userId) VALUES ('${newOrder.deliverBy}', '${newOrder.products}', ${newOrder.fulfilled}, '${newOrder.shippingAddress}',${newOrder.userId})`;
   console.log(str);
   sql.query(
-    `INSERT INTO orders (deliverBy, products, fulfilled, shippingAddress, userId) VALUES (${newOrder.deliverBy}, ${newOrder.products}, ${newOrder.fulfilled}, ${newOrder.shippingAddress},${newOrder.userId})`,
+    `INSERT INTO orders (deliverBy, products, fulfilled, shippingAddress, userId) VALUES ('${newOrder.deliverBy}', '${newOrder.products}', ${newOrder.fulfilled}, '${newOrder.shippingAddress}',${newOrder.userId})`,
     (err, res) => {
       if (err) {
         console.log("error: ", err);

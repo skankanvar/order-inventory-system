@@ -30,7 +30,7 @@ function Inventory() {
 
       <Table.Body>
         {products.map((product, index) => (
-          <Table.Row
+          <Table.Row className="pro"
             key={product.id}
             onClick={() => {
               handleProduct(product.id);

@@ -11,9 +11,9 @@ exports.create = (req, res) => {
 
   // Create a Order
   const order = new Order({
-    products: JSON.stringify(req.body.products),
-    fulfilled: req.body.fulfilled,
-    deliverBy: req.body.deliverBy,
+    products: JSON.stringify({products: req.body.products}),
+    fulfilled: false,
+    deliverBy: '2021-1-1',
     shippingAddress: JSON.stringify(req.body.shippingAddress),
     userId: req.params.id,
   });

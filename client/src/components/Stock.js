@@ -41,6 +41,7 @@ function Stock() {
           <input
             placeholder="Description"
             name="description"
+            id="description"
             value={stock.description}
             onChange={handleChange}
           />
@@ -67,7 +68,7 @@ function Stock() {
             />
           </Form.Field>
         </Form.Group>
-        <Button type="submit" primary>
+        <Button type="submit" primary id="addproduct">
           Submit
         </Button>
       </Form>

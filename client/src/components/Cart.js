@@ -51,10 +51,16 @@ const Cart = () => {
     );
   }
 
+  async function handleSubmit(e){
+    e.preventDefault();
+  await axios.post(`/order/users/${userId}`, {products: cart, shippingAddress: {address1: '23600 Kindred Ter'}});
+  alert("Order Submitted");
+  }
+
   return (
     <Segment>
       <Header as="h1">Shopping Cart</Header>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <List divided relaxed>
           {cart.map((item) => (
             <List.Item key={item.id}>

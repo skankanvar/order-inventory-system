@@ -44,6 +44,7 @@ function Product() {
   const [enhancement, setEnhancement] = useState("");
   const isCustomer = useSelector((state) => state.isCustomer);
   const userId = useSelector((state) => state.id);
+  const [buttonType, setButtonType] = useState("");
 
   function handleChange(e, data) {
     const name = e.target.name;
@@ -56,9 +57,28 @@ function Product() {
   }
 
   async function handleSubmit(e) {
+    const id = e.target.id;
     e.preventDefault();
-    await axios.put(`/products/${productId}`, stock);
-    alert("Product is edited");
+
+    if (buttonType === "edit") {
+      await axios.put(`/products/${productId}`, stock);
+      alert("Product is edited");
+    }
+    if (buttonType === "delete") {
+      await axios.delete(`/products/${productId}`);
+      alert("Product is deleted");
+    }
+   
+    // console.log(id);
+    // if(id === "editproduct"){
+    //   await axios.put(`/products/${productId}`, stock);
+    //   alert("Product is edited");
+    // }
+    // if(id === "deleteproduct"){
+    //   await axios.delete(`/products/${productId}`);
+    //   alert("Product is deleted");
+    // }
+  
   }
 
   async function submitEnhacement() {
@@ -107,6 +127,7 @@ function Product() {
           <input
             placeholder="Description"
             name="description"
+            id="description"
             value={stock.description}
             onChange={handleChange}
             data-cy="productDescription"
@@ -134,8 +155,11 @@ function Product() {
             />
           </Form.Field>
         </Form.Group>
-        <Button type="submit" primary>
+        <Button type="submit"  onClick={() => setButtonType("edit")} primary id="editproduct">
           Edit Product
+        </Button>
+        <Button type="submit"  onClick={() => setButtonType("delete")} primary id="deleteproduct">
+          Delete Product
         </Button>
         <div>
           {enhancements.length > 0 && (
